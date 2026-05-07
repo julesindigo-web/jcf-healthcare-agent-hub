@@ -1,0 +1,10 @@
+# Normalize line endings to LF in repository, checkout as-is on Windows
+* text=auto eol=lf
+
+# Force binary for these types (never convert line endings)
+*.sqlite binary
+*.sqlite-shm binary
+*.sqlite-wal binary
+*.png binary
+*.jpg binary
+*.ico binary

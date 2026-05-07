@@ -1,0 +1,60 @@
+{
+  "name": "jcf-healthcare-agent-hub",
+  "version": "2.1.0-healthcare",
+  "description": "JCF Healthcare Agent Hub — MCP server with FHIR R4/R5, Clinical Decision Support, A2A bridge, and HIPAA compliance on top of JCF Handling Tool.",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:cov-cognitive": "vitest run --coverage --coverage.include=\"src/lib/cognitive-index.ts\" --coverage.thresholds.lines=100 --coverage.thresholds.functions=100 --coverage.thresholds.branches=100 --coverage.thresholds.statements=100 src/__tests__/cognitive-index.test.ts",
+    "test:mutate": "vitest run --no-coverage --exclude=\"src/__tests__/embedding-client.test.ts\"",
+    "lint": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "bench": "node scripts/run-bench.mjs",
+    "mutate": "stryker run"
+  },
+  "keywords": [
+    "mcp",
+    "jcf",
+    "healthcare",
+    "fhir",
+    "hipaa",
+    "clinical-decision-support",
+    "a2a",
+    "semantic-search"
+  ],
+  "author": "JCF Agent v3.1",
+  "license": "Proprietary",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "better-sqlite3": "^12.9.0",
+    "chokidar": "^3.5.3",
+    "dotenv": "^17.4.2",
+    "enhanced-resolve": "^5.21.0",
+    "fast-glob": "^3.3.2",
+    "ioredis": "^5.3.2",
+    "node-cache": "^5.1.2",
+    "picocolors": "^1.0.0",
+    "pino": "^8.17.0",
+    "quick-lru": "^6.1.1",
+    "tiktoken": "^1.0.16",
+    "ts-morph": "^28.0.0",
+    "zod": "^3.22.4"
+  },
+  "optionalDependencies": {
+    "@journeyapps/sqlcipher": "^5.0.0"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^8.6.0",
+    "@stryker-mutator/vitest-runner": "^8.6.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "fast-check": "^3.15.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.5"
+  }
+}

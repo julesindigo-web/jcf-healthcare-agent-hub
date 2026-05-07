@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Test artifacts
+coverage/
+.nyc_output/
+coverage_output.json
+
+# Backups & temp files (e.g. data/*.backup-1777xxx, .tmp-NNN)
+*.backup
+*.backup-*
+*.bak
+*.tmp-*
+*~
+data/*.backup-*
+data/*.bak
+
+# JCF runtime artifacts (must NOT be committed)
+# Top-level orphans created by `process.cwd()`-based path resolution
+.jcf-cognitive-index.json
+.jcf-fs-metadata.sqlite
+.jcf-fs-metadata.sqlite-shm
+.jcf-fs-metadata.sqlite-wal
+.jcf-vector-db.sqlite
+.jcf-vector-db.sqlite-shm
+.jcf-vector-db.sqlite-wal
+.jcf-policies.json
+
+# Integration test sandboxes (mkdtemp at REPO_ROOT — see integration.test.ts)
+.integ-*/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test output artifacts
+test-*.txt
+test-*.log
+
+# Stryker mutation testing
+stryker-tmp/
+reports/
+.stryker-tmp/
+
+# Runtime data (auto-generated, machine-specific)
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/jcf-cognitive-index.json
+
+# Test output artifacts (not for deployment)
+test-final*.txt
+test-output.*
+coverage.json
+
+# Internal directories (not for deployment)
+.audit/
+.inproc-*/
+
+# Internal planning docs (not for competition/deployment)
+IMPLEMENTATION_ROADMAP.md
+SUBMISSION_GUIDE.md

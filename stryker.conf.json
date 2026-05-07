@@ -1,0 +1,26 @@
+{
+  "_comment": "JCF Mutation Testing config — T3.6 using command runner to bypass ESM/vitest-runner hang",
+  "runner": "command",
+  "commandRunner": {
+    "command": "npm run test:mutate"
+  },
+  "mutate": [
+    "src/lib/feature-flags.ts"
+  ],
+  "reporters": ["progress", "clear-text"],
+  "concurrency": 1,
+  "thresholds": {
+    "high": 80,
+    "low": 60,
+    "break": 50
+  },
+  "excludeMutations": [
+    "assignment-operator",
+    "string-literal"
+  ],
+  "timeoutMS": 90000,
+  "timeoutFactor": 2.0,
+  "maxConcurrentTestRuns": 1,
+  "coverageAnalysis": "off",
+  "ignoreSource": ["**/node_modules/**", "**/dist/**", "**/coverage/**"]
+}

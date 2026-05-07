@@ -530,7 +530,7 @@ describe('SecurityManager — coverage gaps', () => {
       const policy: any = {
         path: '**',
         roles: {
-          poweruser: { permissions: ['read', 'write'] }, // includes 'admin' permission
+          poweruser: { permissions: ['read', 'write', 'admin'] }, // includes 'admin' permission
         },
       };
       (security as any).policies.clear();

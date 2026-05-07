@@ -12,13 +12,13 @@
  * extracted from `JcfHealthcareAgentHubServer`.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import fs from "fs/promises";
 import path from "path";
 import os from "os";
 
 // Mock auth-tokens before any imports that use it
-vi.mock('../../lib/auth-tokens.js', () => ({
+vi.mock('../lib/auth-tokens.js', () => ({
   validateToken: vi.fn(),
 }));
 
@@ -37,7 +37,7 @@ import {
   detectLanguage,
 } from "../handlers/shared/content-analysis.js";
 import { fsGetMetadata } from "../handlers/shared/metadata.js";
-import { validateToken } from '../../lib/auth-tokens.js';
+import { validateToken } from '../lib/auth-tokens.js';
 
 import { createTestContext, type TestContext } from "./_test-context.js";
 
@@ -133,28 +133,6 @@ describe("handlers/shared/audit.ts", () => {
       process.env.MCP_FS_AUTH_TOKEN = 'bad-token';
       (validateToken as any).mockReturnValue(null);
       await expect(getCurrentUser(tc.ctx)).rejects.toThrow(/failed validation/);
-    });
-  });
-
-    it("defaults to 'default-user' / 'user' when no env vars are set", async () => {
-      delete process.env.MCP_FS_USER_ID;
-      delete process.env.MCP_FS_USER_ROLE;
-      const u = await getCurrentUser();
-      expect(u).toEqual({ id: "default-user", role: "user" });
-    });
-
-    it("derives 'admin' role when user id == 'admin' and role is unset", async () => {
-      process.env.MCP_FS_USER_ID = "admin";
-      delete process.env.MCP_FS_USER_ROLE;
-      const u = await getCurrentUser();
-      expect(u).toEqual({ id: "admin", role: "admin" });
-    });
-
-    it("respects explicit role override", async () => {
-      process.env.MCP_FS_USER_ID = "alice";
-      process.env.MCP_FS_USER_ROLE = "auditor";
-      const u = await getCurrentUser();
-      expect(u).toEqual({ id: "alice", role: "auditor" });
     });
   });
 

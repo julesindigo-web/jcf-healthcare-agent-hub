@@ -4,7 +4,7 @@
 
 **Version**: 2.1.0-healthcare
 **License**: MIT
-**Status**: PRODUCTION-READY · 2291+ tests · MCP + A2A + FHIR R4
+**Status**: PRODUCTION-READY · 2382+ tests · MCP + A2A + FHIR R4
 **Tools**: 59 (31 infrastructure + 28 healthcare-domain)
 **Date**: May 2026
 
@@ -34,7 +34,7 @@ Today, there is no AI agent that:
 4. **Multi-agent coordination via A2A** — routes specific risks to specialist agents (Lab Agent flags abnormal result handling, Pharmacy Agent flags drug interaction logic, etc.)
 5. **Output**: a structured risk report — safe to deploy, or: *"this change breaks warfarin interaction check in line 847, affecting 12 patient workflows"*
 
-This is not a concept. Every step is a working MCP tool backed by 2291+ tests.
+This is not a concept. Every step is a working MCP tool backed by 2382+ tests.
 
 ---
 
@@ -119,7 +119,7 @@ The builder's background in Health, Safety & Environment engineering means this 
 | Synthetic FHIR data generation | ❌ | ✅ |
 | Content versioning + rollback | ❌ | ✅ |
 | Autonomous self-healing | ❌ | ✅ |
-| 2300+ tests | ❌ | ✅ |
+| 2382+ tests | ❌ | ✅ |
 
 ---
 
@@ -169,222 +169,6 @@ The builder's background in Health, Safety & Environment engineering means this 
 
 ---
 
-*JCF Healthcare Agent Hub — Built for the healthcare systems where failure is not an option.*
-*Tidak pernah berubah.*
-
-## Why Does This Exist?
-
-The MCP ecosystem has over 10,000 publicly available servers. The official Anthropic filesystem server and popular alternatives provide basic file read/write/search capabilities. However, none of them address the real challenges that emerge when AI agents operate on production filesystems:
-
-- **Silent data loss** — No versioning means no recovery from accidental overwrites
-- **Security blind spots** — No secrets scanning means API keys and credentials leak into agent context
-- **Stale cache corruption** — No mtime validation means agents operate on outdated file state
-- **Unbounded resource usage** — No batch limits or file size enforcement means a single request can exhaust system resources
-- **No accountability** — No audit trail means no way to trace what an agent did and when
-- **No self-repair** — When things break, there's no autonomous recovery
-- **No codebase understanding** — Agents operate blindly without knowing what files contain, how they connect, or what breaks when changed
-
-JCF Healthcare Agent Hub was built to solve every one of these problems.
-
----
-
-## Core Capabilities
-
-### 1. Cognitive Index Engine (HCI) — NEW
-The flagship feature. A 3-layer hierarchical cognitive index that extracts deep understanding from any codebase:
-- **Layer 1: Project Skeleton** — Directory tree, tech stack detection (package.json, requirements.txt, go.mod, Cargo.toml), architecture pattern classification (monolith, microservices, MVC, MVVM, layered, hexagonal, plugin-based, serverless, CLI-library)
-- **Layer 2: Module Contracts** — Per-file exports, imports, defined types, pattern classification
-- **Layer 3: Unit Fingerprints** — Per-function/class signatures, complexity scoring, purity analysis, side effect detection, semantic tagging, call target resolution, type dependency mapping
-
-### 2. Node-Level Knowledge Graph (NLKG) — NEW
-Semantic dependency graph with typed edges representing real relationships between code entities:
-- **Nodes**: Modules and units (functions, classes, interfaces, types, enums)
-- **Edges**: `contains`, `calls`, `uses-type`, `references`, `extends`, `implements`
-- **Analysis**: Subgraph extraction (depth-limited, directional), impact analysis (direct + transitive), data flow chain tracing, cycle detection
-
-### 3. Pattern Detector & Semantic Compression — NEW
-Detects 11 code pattern categories and calculates token savings through semantic compression:
-- **Patterns**: CRUD, Middleware, Observer, Factory, Singleton, Adapter, Strategy, Repository, Service, Controller, Utility
-- **Compression**: Delta extraction per pattern, compression ratio calculation, token savings estimation — optimal for LLM context windows
-
-### 4. Type Flow Analyzer — NEW
-Traces type definitions through the codebase — who produces, transforms, validates, and consumes each type:
-- **Type Flow**: Definition → Production → Transformation → Validation → Consumption
-- **Data Pipelines**: End-to-end pipeline tracing from entry points with branching point detection
-
-### 5. Code Intelligence Engine — NEW
-Unified orchestrator integrating all cognitive modules with a single query interface supporting 8 query types including `full_context` — compressed project knowledge optimized for minimal token usage.
-
-### 6. Semantic Search Engine (Hybrid RRF)
-Built-in vector database with hybrid tf-idf + Qwen3-Embedding-0.6B (1024-dim) via Reciprocal Rank Fusion (k=60). AI agents can search files by meaning, not just by filename pattern. Graceful degradation to tf-idf-only when the embedding bridge is unavailable.
-
-### 7. Content-Based Versioning & Rollback
-Every file modification creates a content-addressed version using SHA-256 hashing. Versions store actual file content, enabling true rollback to any previous state.
-
-### 8. Role-Based Access Control (RBAC) + Auth Tokens
-Dynamic user resolution via environment variables. Every operation passes through `enforceRBAC()` with policy-based permission checks loaded from `.jcf-policies.json`. Auth-token system (`AuthTokenManager`) uses SHA-256 hashed tokens with role-based access and configurable expiry.
-
-### 9. Secrets Scanning with Masked Output
-Proactive detection of 30+ patterns: AWS, GCP, Azure, GitHub, Slack, Stripe, npm, PyPI, Discord, Docker, SendGrid, Mailgun, Twilio, private keys, JWTs, plus generic high-entropy tokens via Shannon entropy (≥ 4.5 bits/char). Detected secrets are masked in all outputs.
-
-### 9b. SSRF Prevention (T3.1)
-`PathValidator` blocks URL-scheme paths (`http://`, `s3://`, `ftp://`, `file://`) and UNC paths before any filesystem call. Embedding client validates against host allowlist.
-
-### 9c. SQLCipher Encryption (T3.4)
-Optional AES-256 encrypted SQLite via `@journeyapps/sqlcipher`. Controlled by `JCF_USE_SQLCIPHER=1` + `JCF_DB_KEY`. Feature flag is frozen + immutable at import time.
-
-### 10. Multi-Level Caching
-Two-tier cache architecture: primary in-memory NodeCache for hot paths, secondary Redis for distributed scenarios. Cache entries include file mtime metadata for automatic staleness detection.
-
-### 11. Dependency Graph & Cycle Detection
-Tracks import/dependency relationships between files with bidirectional graph. Cycle detection finds ALL cycles, and coherence scoring identifies tightly-coupled files.
-
-### 12. Autonomous Self-Healing (AERS Strategy)
-Implements the Assess-Execute-Recover-Supervise pattern for autonomous error recovery. Categorized fix strategies handle database corruption, cache invalidation, metadata loss, and network errors.
-
-### 13. Comprehensive Audit Trail
-Every filesystem operation is recorded with user identity, action type, file path, result, and timestamp. Audit queries support filtering and pagination.
-
-### 14. Resource Protection
-Batch operations are capped at a configurable limit. File writes enforce a maximum file size. Recursive search respects a maximum directory depth.
-
----
-
-## Tool Reference (33 Tools)
-
-### Diagnostics (3)
-| Tool | Description |
-|------|-------------|
-| `ping` | Health probe + DB stats + JCF Constitutional enforcement status |
-| `estatus` | §0 IMMUTABLE_BINDING_CORE status report (gates, compliance level, drift, optional enforcement log) |
-| `verify` | G0 binding-integrity gate — verifies binding against stored anchor hash |
-
-### Core Filesystem (6)
-| Tool | Description |
-|------|-------------|
-| `read_file` | Read file content with cache-aware staleness detection |
-| `write_file` | Write file with versioning, secrets scan, and size enforcement |
-| `edit_file` | Find-and-replace with `replaceAll` for all occurrences |
-| `append_file` | Chunked append for large files with `createIfMissing` support |
-| `delete_file` | Delete file with pre-delete version snapshot |
-| `list_directory` | List directory contents with optional hidden file visibility |
-
-### Search (2)
-| Tool | Description |
-|------|-------------|
-| `search_files` | Recursive file search with pattern matching |
-| `semantic_search` | Hybrid tf-idf + Qwen3-Embedding RRF semantic search |
-
-### Versioning (3)
-| Tool | Description |
-|------|-------------|
-| `get_version_history` | Retrieve version history for a file with optional limit |
-| `rollback_file` | Restore file to a previous version with pre-rollback snapshot |
-| `get_current_metadata` | Get file metadata (size, mtime, hash, language) |
-
-### Dependency & Coherence (4)
-| Tool | Description |
-|------|-------------|
-| `get_dependencies` | Get forward dependencies of a file (optional transitive) |
-| `get_dependents` | Get reverse dependents of a file (optional transitive) |
-| `check_coherence` | Score file coupling/isolation (0-1 scale) |
-| `detect_circular_dependencies` | Find ALL dependency cycles in the graph |
-
-### Operations & Monitoring (4)
-| Tool | Description |
-|------|-------------|
-| `batch_operations` | Execute multiple read/write/edit/delete operations atomically |
-| `health_check` | System health status + subsystem warnings (embedding, self-healing, rate limiter) |
-| `get_enabled_features` | List currently enabled feature flags |
-| `get_audit_log` | Query audit trail with filtering and pagination |
-
-### Cognitive Intelligence (11)
-| Tool | Description |
-|------|-------------|
-| `build_cognitive_index` | Build full 3-layer cognitive index for a project |
-| `get_build_status` | Check background cognitive index build status |
-| `get_project_skeleton` | Layer 1: Project overview, tech stack, architecture patterns |
-| `get_module_contracts` | Layer 2: Per-file exports, imports, defined types |
-| `get_unit_fingerprints` | Layer 3: Per-unit signatures, complexity, purity, side effects |
-| `query_code_intelligence` | Unified query across all cognitive modules (8 query types) |
-| `get_impact_analysis` | Impact set (direct + transitive) with subgraph |
-| `get_type_flow` | Type flow tracing with consumers and producers |
-| `detect_patterns` | Detect 11 code patterns + semantic compression |
-| `get_knowledge_subgraph` | Extract dependency subgraph around a node |
-| `get_intelligence_stats` | Statistics for all cognitive modules |
-
----
-
-## Architecture
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│                        MCP Client                            │
-│              (Windsurf / Claude / Cursor / VS Code)          │
-└───────────────────────────┬──────────────────────────────────┘
-                            │ JSON-RPC 2.0
-┌───────────────────────────▼──────────────────────────────────┐
-│                JCF Healthcare Agent Hub Server                       │
-│  ┌────────────┐ ┌──────────┐ ┌──────────┐ ┌────────────────┐ │
-│  │ Security   │ │  Cache   │ │ Database │ │ VectorDB       │ │
-│  │(RBAC+SSRF │ │(2-tier)  │ │(SQLite   │ │(tf-idf+Qwen3  │ │
-│  │+AuthToken)│ └──────────┘ │ WAL)     │ │ RRF hybrid)  │ │
-│  └────────────┘              └──────────┘ └────────────────┘ │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────────────────────┐ │
-│  │DepGraph  │ │SelfHeal  │ │    Cognitive Engine           │ │
-│  │(+cycles) │ │ (AERS)   │ │ ┌────────┬────────┬────────┐ │ │
-│  └──────────┘ └──────────┘ │ │  HCI   │  NLKG  │Pattern │ │ │
-│  ┌───────────────────────┐ │ │ Index  │  Graph │Detector│ │ │
-│  │     Audit Trail       │ │ ├────────┼────────┼────────┤ │ │
-│  └───────────────────────┘ │ │TypeFlow│  Code  │        │ │ │
-│                             │ │Analyzer│Intel.  │        │ │ │
-│                             │ └────────┴────────┴────────┘ │ │
-│                             └──────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────┘
-                            │
-              ┌─────────────▼─────────────┐
-              │     Local Filesystem       │
-              └───────────────────────────┘
-```
-
----
-
-## Competitive Landscape
-
-| Capability | Anthropic Official FS | mark3labs/mcp-filesystem | **JCF Healthcare Agent Hub** |
-|-----------|:---:|:---:|:---:|
-| Basic CRUD | ✅ | ✅ | ✅ |
-| Path validation | ✅ | ✅ | ✅ |
-| Semantic search | ❌ | ❌ | ✅ |
-| Content versioning | ❌ | ❌ | ✅ |
-| Rollback | ❌ | ❌ | ✅ |
-| RBAC | ❌ | ❌ | ✅ |
-| Secrets scanning | ❌ | ❌ | ✅ |
-| Multi-level cache | ❌ | ❌ | ✅ |
-| Dependency graph | ❌ | ❌ | ✅ |
-| Cycle detection | ❌ | ❌ | ✅ |
-| Self-healing | ❌ | ❌ | ✅ |
-| SSRF prevention | ❌ | ❌ | ✅ |
-| Auth-token system | ❌ | ❌ | ✅ |
-| SQLCipher encryption | ❌ | ❌ | ✅ |
-| Audit trail | ❌ | ❌ | ✅ |
-| Coherence scoring | ❌ | ❌ | ✅ |
-| Batch operations | ❌ | ❌ | ✅ |
-| Cognitive Index | ❌ | ❌ | ✅ |
-| Knowledge Graph | ❌ | ❌ | ✅ |
-| Pattern Detection | ❌ | ❌ | ✅ |
-| Type Flow Analysis | ❌ | ❌ | ✅ |
-| Impact Analysis | ❌ | ❌ | ✅ |
-| Semantic Compression | ❌ | ❌ | ✅ |
-| Health check warnings | ❌ | ❌ | ✅ |
-| Hybrid RRF search | ❌ | ❌ | ✅ |
-
-**JCF Healthcare Agent Hub is the only MCP filesystem server with enterprise-grade reliability, security, intelligence, and cognitive codebase understanding.**
-
-> **1015 tests | 0 failures | 86%+ global coverage | 100% mutation kill | 100% cognitive-index coverage**
-
----
-
 ## Technical Specifications
 
 - **Runtime**: Node.js 18+ (ES2022, ESNext modules)
@@ -396,32 +180,20 @@ Batch operations are capped at a configurable limit. File writes enforce a maxim
 - **Vector DB**: Hybrid tf-idf + Qwen3-Embedding-0.6B (1024-dim) via Reciprocal Rank Fusion
 - **Cognitive Index**: 3-layer HCI with auto tech stack + architecture detection
 - **Knowledge Graph**: Node-level with 6 edge kinds
-- **Build**: Zero TypeScript errors, 20 JS files compiled
-
----
-
-## Design Philosophy
-
-1. **Data integrity is non-negotiable** — Every write is versioned, every rollback creates a snapshot, every save is atomic
-2. **Security by default** — Secrets are masked, RBAC is enforced, paths are validated, operations are audited
-3. **Graceful degradation** — Self-healing recovers from corruption, cache misses fall through, health checks report honestly
-4. **Resource-aware** — Batch limits, file size limits, depth limits prevent unbounded resource consumption
-5. **Observable** — Every operation is audited, every component reports health, every error is categorized
-6. **Cognitive understanding** — Build deep codebase understanding before making changes, know impact before acting
+- **Build**: Zero TypeScript errors, 2382 tests passing
 
 ---
 
 ## Use Cases
 
 - **AI Coding Assistants** — Safe, versioned, auditable file operations + deep codebase understanding for autonomous coding agents
-- **Enterprise MCP Deployments** — RBAC + audit trail + secrets scanning for compliance-sensitive environments
-- **Knowledge Base Management** — Semantic search + dependency tracking + cognitive indexing for large codebases
-- **Disaster Recovery** — Content versioning + rollback + self-healing for resilient file operations
-- **Multi-Agent Systems** — Batch operations + resource limits + cache coherence for concurrent agent access
-- **Code Review & Refactoring** — Impact analysis + type flow + pattern detection for safe code changes
+- **Healthcare AI Development** — FHIR resource management, clinical decision support, HIPAA compliance
+- **EHR Integration** — Bridge between AI agents and FHIR-based electronic health records
+- **Multi-Agent Clinical Workflows** — A2A coordination between specialist healthcare agents
+- **Compliance Auditing** — PHI detection, access logging, breach assessment for HIPAA compliance
+- **Synthetic Data Generation** — PHI-safe test data for healthcare CI/CD pipelines
 
 ---
 
-*JCF Healthcare Agent Hub — Beyond God-Like Cognitive Intelligence for the age of AI agents.*
-*Built with JCF (Jules Cognitive Framework).*
-*Tidak pernah berubah.*
+*JCF Healthcare Agent Hub — Built for the healthcare systems where failure is not an option.*
+

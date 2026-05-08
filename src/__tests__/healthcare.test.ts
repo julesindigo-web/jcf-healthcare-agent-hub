@@ -702,7 +702,7 @@ describe('Healthcare — FHIR Engine', () => {
       const result = await Fhir.fhirBatch(baseCtx as any, {
         operations: [
           { op: 'create', resourceType: 'Patient', resource: validPatient },
-          { op: 'foo', resourceType: 'Patient', id: 'pat1' }, // unknown op
+          { op: 'foo' as any, resourceType: 'Patient', id: 'pat1' }, // unknown op
         ],
       });
       expect(result.results).toHaveLength(2);

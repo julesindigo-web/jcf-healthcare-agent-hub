@@ -48,6 +48,7 @@ yarn-debug.log*
 .env
 .env.local
 .env.*.local
+.env.railway
 
 # Test output artifacts
 test-*.txt

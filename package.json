@@ -12,6 +12,7 @@
     "test:mutate": "vitest run --no-coverage --exclude=\"src/__tests__/embedding-client.test.ts\"",
     "lint": "tsc --noEmit",
     "start": "node dist/index.js",
+    "start:http": "node dist/http-server.js",
     "dev": "tsc --watch",
     "bench": "node scripts/run-bench.mjs",
     "mutate": "stryker run"

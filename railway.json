@@ -8,6 +8,7 @@
     "numReplicas": 1,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 5,
-    "healthcheckPath": "/health"
+    "healthcheckPath": "/health",
+    "startCommand": "npm run start:http"
   }
 }

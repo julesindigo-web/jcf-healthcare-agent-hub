@@ -37,15 +37,67 @@
 ### Install & Build
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/julesindigo-web/jcf-healthcare-agent-hub.git
 cd jcf-healthcare-agent-hub
 npm install
 npm run build
 ```
 
+### Run Locally (stdio)
+
+```bash
+npm start
+```
+
+### Run with HTTP Server (Railway/Vercel)
+
+```bash
+npm run start:http
+```
+
+The HTTP server provides:
+- `GET /health` - Health check endpoint
+- `GET /` - Server info
+- `POST /mcp` - MCP JSON-RPC 2.0 communication
+
+### Railway Deployment
+
+1. **Create Railway Account**
+   - Go to https://railway.com
+   - Sign up with GitHub
+
+2. **Deploy from GitHub**
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select `jcf-healthcare-agent-hub` repository
+   - Railway auto-detects Node.js and builds automatically
+
+3. **Configure Environment Variables**
+   ```
+   NODE_ENV=production
+   PORT=8080
+   HTTP_PORT=8080
+   MCP_TRANSPORT=http
+   LOG_LEVEL=info
+   FHIR_VERSION=R4
+   ENABLE_PHI_DETECTION=true
+   ENABLE_HIPAA_AUDIT=true
+   ENABLE_A2A=true
+   A2A_PROTOCOL_VERSION=draft-01
+   ```
+
+4. **Deploy**
+   - Railway automatically deploys on git push
+   - Monitor build logs in Railway dashboard
+   - Generate Railway domain for public URL
+
+5. **Test Deployment**
+   ```bash
+   curl https://your-project.railway.app/health
+   ```
+
 ### Configure MCP Client
 
-**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+**Local (stdio) - Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 ```json
 {
   "mcpServers": {
@@ -56,6 +108,18 @@ npm run build
         "JCF_HANDLING_TOOL_HOME": "/path/to/jcf-healthcare-agent-hub",
         "JCF_HANDLING_TOOL_DATA_DIR": "/path/to/jcf-healthcare-agent-hub/data"
       }
+    }
+  }
+}
+```
+
+**Railway Deployment (HTTP) - Claude Desktop**:
+```json
+{
+  "mcpServers": {
+    "jcf-healthcare-agent-hub": {
+      "url": "https://your-project.railway.app/mcp",
+      "transport": "http"
     }
   }
 }
@@ -224,4 +288,4 @@ npm run lint          # Type check only
 
 ---
 
-*JCF Healthcare Agent Hub · v2.1.0-healthcare · MIT-like license · Built on JCF Handling Tool engine*
+*JCF Healthcare Agent Hub · v2.1.0-healthcare · MIT License · Built on JCF Handling Tool engine*

@@ -28,7 +28,7 @@
     "semantic-search"
   ],
   "author": "JCF Agent v3.1",
-  "license": "Proprietary",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "better-sqlite3": "^12.9.0",

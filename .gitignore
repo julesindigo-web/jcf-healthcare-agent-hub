@@ -92,3 +92,6 @@ scripts/smoke-qwen3.mjs
 # Old config files (not for competition/deployment)
 mcp-fs-config.json
 stryker.conf.json
+
+# Other projects (not for this repository)
+New job/

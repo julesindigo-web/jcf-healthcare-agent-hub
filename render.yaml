@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: jcf-healthcare-agent-hub
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:http
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: NODE_ENV
+        value: production
+      - key: JCF_HEALTHCARE_AGENT_HUB_HOME
+        value: /opt/render/project/src
+      - key: JCF_HEALTHCARE_AGENT_HUB_DATA_DIR
+        value: /opt/render/project/src/data
+    healthCheckPath: /health
+    numInstances: 1

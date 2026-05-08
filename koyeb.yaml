@@ -1,0 +1,30 @@
+name: jcf-healthcare-agent-hub
+services:
+  - type: web
+    name: mcp-server
+    env: node
+    plan: free
+    region: washington-dc
+    build:
+      type: dockerfile
+      dockerfile: Dockerfile
+    deploy:
+      port: 8080
+      health_check:
+        http: true
+        path: /health
+        interval: 30s
+        timeout: 10s
+        retries: 3
+    env_vars:
+      - key: PORT
+        value: 8080
+      - key: NODE_ENV
+        value: production
+      - key: JCF_HEALTHCARE_AGENT_HUB_HOME
+        value: /app
+      - key: JCF_HEALTHCARE_AGENT_HUB_DATA_DIR
+        value: /app/data
+    instance_type: free
+    min_instances: 1
+    max_instances: 1

@@ -1,0 +1,84 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output (will be rebuilt in container)
+dist/
+*.tsbuildinfo
+
+# Test artifacts
+coverage/
+.nyc_output/
+coverage_output.json
+test-*.txt
+test-*.log
+
+# JCF runtime artifacts (must NOT be in Docker image)
+.jcf-*.sqlite
+.jcf-*.sqlite-shm
+.jcf-*.sqlite-wal
+.jcf-*.json
+.jcf-policies.json
+
+# Runtime data (auto-generated, machine-specific)
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/jcf-cognitive-index.json
+data/jcf-policies.json
+
+# Environment files (use platform env vars instead)
+.env
+.env.local
+.env.*.local
+.env.railway
+.env.koyeb
+.env.render
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Internal directories
+.audit/
+.inproc-*/
+.integ-*/
+
+# Internal docs (not for deployment)
+docs/adr/
+IMPLEMENTATION_ROADMAP.md
+SUBMISSION_GUIDE.md
+
+# Internal scripts
+scripts/migrate-vector-db.mjs
+scripts/run-bench.mjs
+scripts/run-mutations.mjs
+scripts/smoke-qwen3.mjs
+
+# Old config files
+mcp-fs-config.json
+stryker.conf.json
+
+# Other projects
+New job/
+
+# Stryker mutation testing
+stryker-tmp/
+reports/
+.stryker-tmp/
+
+# Backup files
+*.backup
+*.backup-*
+*.bak
+*.tmp-*
+*~

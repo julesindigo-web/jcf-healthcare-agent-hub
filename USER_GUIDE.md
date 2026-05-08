@@ -1,103 +1,191 @@
 # JCF Healthcare Agent Hub - User Guide
 
-> **Tipe**: Production-Grade MCP Server | **Tools**: 33 | **Versi**: dari `package.json` (SSOT)
+> **Type**: Production-Grade MCP Server | **Tools**: 59 (31 base + 28 healthcare) | **Version**: 2.1.0-healthcare
 
 ---
 
-## Daftar Isi
+## Table of Contents
 
-1. [Pendahuluan](#pendahuluan)
-2. [Fitur Utama](#fitur-utama)
-3. [Arsitektur Sistem](#arsitektur-sistem)
+1. [Introduction](#introduction)
+2. [Key Features](#key-features)
+3. [System Architecture](#system-architecture)
 4. [Tool Reference](#tool-reference)
-5. [Konfigurasi](#konfigurasi)
-6. [Penggunaan Lanjutan](#penggunaan-lanjutan)
-7. [Keamanan](#keamanan)
+5. [Configuration](#configuration)
+6. [Advanced Usage](#advanced-usage)
+7. [Security](#security)
 8. [Troubleshooting](#troubleshooting)
 9. [Best Practices](#best-practices)
-10. [Integrasi IDE](#integrasi-ide)
+10. [IDE Integration](#ide-integration)
 
 ---
 
-## Pendahuluan
+## Introduction
 
-### Apa itu JCF Healthcare Agent Hub?
+### What is JCF Healthcare Agent Hub?
 
-**JCF Healthcare Agent Hub** adalah server Model Context Protocol (MCP) tingkat produksi yang menyediakan operasi filesystem cerdas, aman, self-healing, **dan pemahaman kognitif mendalam terhadap codebase**. Dibangun dengan JCF (Jules Cognitive Framework), server ini memberikan kemampuan enterprise yang jauh melampaui implementasi marketplace standar.
+**JCF Healthcare Agent Hub** is a production-grade Model Context Protocol (MCP) server providing intelligent, secure, self-healing filesystem operations **plus comprehensive healthcare domain tools**. Built with JCF (Jules Cognitive Framework), this server delivers enterprise capabilities far beyond standard marketplace implementations.
 
-### Keunggulan vs Filesystem Standar
+### Healthcare Domain Capabilities
 
-| Aspek | MCP Filesystem Standar | JCF Healthcare Agent Hub |
-|-------|------------------------|-------------------|
-| Search | Pattern matching saja | **Semantic search** dengan tf-idf vectors |
-| Security | Validasi path dasar | **RBAC policies** + secrets scanning |
-| Audit | Tidak ada | **Comprehensive audit trail** |
-| Versioning | Tidak ada | **Content-based versioning** |
+This server extends the base JCF handling tool with healthcare-specific functionality:
+
+- **FHIR R4 Resource Engine** — Full CRUD, validation, capability checking, batch operations
+- **Clinical Decision Support (CDS)** — Drug interaction checks, risk assessment, guideline lookup
+- **HIPAA Compliance** — PHI detection, audit trail, breach assessment, consent management
+- **Synthetic Data Generation** — FHIR-compliant, PHI-safe synthetic patients/conditions/observations
+- **A2A Agent Bridge** — Agent-to-agent communication per W3C draft-01 specification
+
+### Advantages vs Standard Filesystem
+
+| Aspect | Standard MCP Filesystem | JCF Healthcare Agent Hub |
+|--------|------------------------|--------------------------|
+| Search | Pattern matching only | **Semantic search** with tf-idf vectors |
+| Security | Basic path validation | **RBAC policies** + secrets scanning |
+| Audit | None | **Comprehensive audit trail** |
+| Versioning | None | **Content-based versioning** |
 | Performance | No caching | **Multi-level cache** |
-| Dependencies | Tidak ada | **Dependency graph** + coherence scoring |
-| Reliability | No recovery | **Self-healing** dengan AERS |
-| Operations | Single file | **Batch operations** dengan atomicity |
-| Codebase Understanding | Tidak ada | **Cognitive Index + Knowledge Graph + Pattern Detection + Type Flow** |
-| Impact Analysis | Tidak ada | **Node-level impact analysis** |
-| Type Intelligence | Tidak ada | **Type flow tracing** + data pipeline analysis |
-| Pattern Recognition | Tidak ada | **11 pattern categories** + semantic compression |
+| Dependencies | None | **Dependency graph** + coherence scoring |
+| Reliability | No recovery | **Self-healing** with AERS |
+| Operations | Single file | **Batch operations** with atomicity |
+| Codebase Understanding | None | **Cognitive Index + Knowledge Graph + Pattern Detection + Type Flow** |
+| Impact Analysis | None | **Node-level impact analysis** |
+| Type Intelligence | None | **Type flow tracing** + data pipeline analysis |
+| Pattern Recognition | None | **11 pattern categories** + semantic compression |
+| **Healthcare Tools** | None | **FHIR R4 + CDS + HIPAA + Synthetic + A2A (28 tools)** |
 
 ---
 
-## Fitur Utama
+## Key Features
 
 ### 1. Semantic Search (`semantic_search`)
-Search berbasis hybrid tf-idf + Qwen3-Embedding-0.6B (1024-dim) via Reciprocal Rank Fusion (k=60). Graceful degradation ke tf-idf-only jika embedding bridge tidak tersedia. Menemukan file berdasarkan kesamaan konseptual.
+Hybrid tf-idf + Qwen3-Embedding-0.6B (1024-dim) via Reciprocal Rank Fusion (k=60). Graceful degradation to tf-idf-only if embedding bridge unavailable. Finds files by conceptual similarity.
 
 ```json
 { "query": "authentication middleware", "limit": 10, "threshold": 0.3 }
 ```
 
 ### 2. RBAC Security + Auth Tokens
-Role-Based Access Control dengan kebijakan per-direktori + auth-token system (SHA-256 hashed, role-based, expiry).
+Role-Based Access Control with per-directory policies + auth-token system (SHA-256 hashed, role-based, expiry).
 
 ### 3. Secrets Scanning (30+ patterns)
-Mendeteksi 30+ pola: AWS, GCP, Azure, GitHub, Slack, Stripe, npm, PyPI, Discord, Docker, SendGrid, Mailgun, Twilio, private keys, JWTs, plus Shannon entropy filter (≥ 4.5 bits/char).
+Detects 30+ patterns: AWS, GCP, Azure, GitHub, Slack, Stripe, npm, PyPI, Discord, Docker, SendGrid, Mailgun, Twilio, private keys, JWTs, plus Shannon entropy filter (≥ 4.5 bits/char).
 
 ### 4. Audit Logging
-Setiap operasi dicatat dalam database immutable.
+Every operation recorded in immutable database.
 
 ### 5. Version Control
-Snapshot otomatis pada setiap modifikasi file dengan content-hash addressing. Rollback ke versi sebelumnya.
+Automatic snapshot on every file modification with content-hash addressing. Rollback to previous versions.
 
 ### 6. Dependency Tracking
-Membangun graph dependensi real-time dari import statements. Circular dependency detection.
+Builds real-time dependency graph from import statements. Circular dependency detection.
 
 ### 7. Self-Healing (AERS)
-Recovery otomatis menggunakan Application Error Response Strategy.
+Automatic recovery using Application Error Response Strategy.
 
-### 8. Cognitive Intelligence (NEW)
-Sistem pemahaman kognitif mendalam terhadap codebase:
+### 8. Cognitive Intelligence
+Deep cognitive understanding of codebase:
 
 - **Cognitive Index Engine (HCI)** — 3-layer hierarchical index: Project Skeleton → Module Contracts → Unit Fingerprints
-- **Node-Level Knowledge Graph (NLKG)** — Semantic dependency graph dengan typed edges
-- **Pattern Detector** — Deteksi 11 pattern categories + semantic compression
-- **Type Flow Analyzer** — Trace type definitions melalui codebase
-- **Code Intelligence Engine** — Unified orchestrator dengan single query interface
+- **Node-Level Knowledge Graph (NLKG)** — Semantic dependency graph with typed edges
+- **Pattern Detector** — Detects 11 pattern categories + semantic compression
+- **Type Flow Analyzer** — Trace type definitions through codebase
+- **Code Intelligence Engine** — Unified orchestrator with single query interface
+
+### 9. FHIR R4 Resource Engine (NEW)
+Full FHIR R4 resource management with 8 tools:
+
+- `fhir_create` — Create FHIR resources
+- `fhir_read` — Read FHIR resources
+- `fhir_update` — Update FHIR resources
+- `fhir_delete` — Delete FHIR resources
+- `fhir_search` — Search FHIR resources
+- `fhir_batch` — Batch FHIR operations
+- `fhir_validate` — Validate FHIR resources
+- `fhir_capability` — Check server capabilities
+
+**Features:**
+- Two-phase commit with compensation for transactional integrity
+- Semantic validation per FHIR R4 specification
+- Filesystem-based storage with SQLite versioning
+- Support for all major FHIR resource types (Patient, Observation, Condition, Medication, etc.)
+
+### 10. Clinical Decision Support (NEW)
+6 CDS tools for clinical workflows:
+
+- `clinical_assess` — Assess patient condition against rules
+- `care_plan_create` — Generate care plans
+- `medication_check` — Drug interaction detection
+- `lab_interp` — Laboratory result interpretation
+- `risk_calculate` — Risk score calculation
+- `guideline_lookup` — Clinical guideline lookup
+
+**Features:**
+- 15 drug interaction pairs (warfarin, digoxin, metformin, statins, etc.)
+- 9 ICD-10 condition rules with age-stratified risk scoring
+- 15+ clinical guidelines (ADA diabetes, JNC8 hypertension, GINA asthma, KDIGO CKD)
+- JSON Schema validation for inputs/outputs
+
+### 11. HIPAA Compliance (NEW)
+5 compliance tools for healthcare security:
+
+- `hipaa_audit_report` — Generate HIPAA audit reports
+- `consent_manage` — Manage patient consent
+- `phi_detection` — Detect PHI in content
+- `access_log` — Query access logs
+- `breach_assess` — Assess breach severity
+
+**Features:**
+- 10 PHI pattern types (SSN, DOB, phone, email, MRN, NPI, address, etc.)
+- Real-time audit trail from SQLite database
+- Breach assessment with HIPAA notification threshold (500+ affected)
+
+### 12. Synthetic Data Generation (NEW)
+4 tools for PHI-safe synthetic data:
+
+- `synthetic_patient_gen` — Generate synthetic patients
+- `synthetic_condition_gen` — Generate synthetic conditions
+- `synthetic_observation_gen` — Generate synthetic observations
+- `synthetic_bundle_gen` — Generate synthetic FHIR bundles
+
+**Features:**
+- Faker-based generation (FHIR-compliant)
+- Zero real PHI — all data is synthetic
+- Configurable count and demographic parameters
+
+### 13. A2A Agent Bridge (NEW)
+5 tools for agent-to-agent communication:
+
+- `a2a_agent_card` — Declare agent capabilities
+- `a2a_discover_agents` — Discover available agents
+- `a2a_send_task` — Send tasks to agents
+- `a2a_get_task_status` — Query task status
+- `a2a_route_message` — Route messages to agents
+
+**Features:**
+- W3C A2A draft-01 specification compliance
+- In-memory task store for hackathon demo
+- Static agent registry (Lab, Pharmacy, Radiology, Referral agents)
+- Priority-based task queue (routine/urgent/stat)
 
 ---
 
-## Arsitektur Sistem
+## System Architecture
 
 ```
-                    MCP Client (support MCP protocol)
+                    MCP Client (supports MCP protocol)
                               |
                               v
               +-------------------------------+
-              |    JcfHandlingToolServer      |
-              |    32 Tools Registered        |
+              |    JcfHealthcareAgentHub     |
+              |    59 Tools Registered       |
+              |    (31 base + 28 healthcare) |
               +---------------+---------------+
                               |
     +---------+-------+-------+-----+--------+----------+-----------+
     |         |       |           |        |          |               |
     v         v       v           v        v          v               v
 +--------+ +------+ +-------+ +------+ +--------+ +---------+ +------------+
-| Logger | |Config| |  DB   | |Cache | |VectorDB| |Security | | Cognitive  |
+| Logger | |Config| |  DB   | |Cache | |VectorDB| | Security | | Cognitive  |
 | (pino) | |(Zod) | |(SQLite| |(MLC) | |(hybrid | |(RBAC    | |  Engine    |
 |        | |      | | WAL)  | |      | | RRF)   | |+SSRF    | |            |
 |        | |      | |       | |      | |        | |+Auth)   | |            |
@@ -108,15 +196,22 @@ Sistem pemahaman kognitif mendalam terhadap codebase:
                                                   |DepGraph  | | Detector  |
                                                   |+Self Heal| | TypeFlow  |
                                                   +----------+ +------------+
+                                                        |
+                                                        v
+                                              +---------------------+
+                                              |  Healthcare Module  |
+                                              |  FHIR + CDS + HIPAA |
+                                              |  + Synthetic + A2A  |
+                                              +---------------------+
 ```
 
-### Komponen Inti
+### Core Components
 
-| Komponen | Fungsi |
-|----------|--------|
-| **Logger** | Structured logging dengan pino |
-| **Config** | Management konfigurasi dengan Zod validation |
-| **Database** | SQLite WAL via `better-sqlite3` (auto-migrate dari legacy JSON). Optional SQLCipher AES-256. |
+| Component | Function |
+|-----------|---------|
+| **Logger** | Structured logging with pino |
+| **Config** | Configuration management with Zod validation |
+| **Database** | SQLite WAL via `better-sqlite3` (auto-migrate from legacy JSON). Optional SQLCipher AES-256. |
 | **Cache** | Multi-level caching (NodeCache + QuickLRU + optional Redis) |
 | **VectorDB** | Hybrid tf-idf + Qwen3-Embedding-0.6B (1024-dim) via RRF |
 | **Security** | RBAC + auth tokens + secrets scanning (30+) + SSRF prevention + path hardening |
@@ -127,93 +222,78 @@ Sistem pemahaman kognitif mendalam terhadap codebase:
 | **PatternDetector** | Pattern detection + semantic compression |
 | **TypeFlowAnalyzer** | Type flow tracing + data pipeline analysis |
 | **CodeIntelligenceEngine** | Unified orchestrator |
+| **HealthcareModule** | FHIR R4 engine + CDS + HIPAA compliance + Synthetic data + A2A bridge |
 
 ---
 
 ## Tool Reference
 
-> **Total**: 33 tools across 7 categories.
+> **Total**: 59 tools across 12 categories (31 base + 28 healthcare).
 
-### Diagnostics (3 Tools)
+### Base Tools (31)
 
-#### D1. `ping`
-Health probe + DB stats + JCF Constitutional enforcement status.
+#### Diagnostics (1 Tool)
+
+**D1. `ping`**
+Health probe + DB stats.
 
 ```json
 {}
 ```
 
-**Response**: `{ status, server, version, db_path, stats, enforcement, timestamp }`. Field `enforcement` membawa `binding_active`, `anchor_hash`, `compliance_level`, `enforcement_depth`, `bypass_possible`, `override_possible`.
-
-#### D2. `estatus`
-Laporan status §0 IMMUTABLE_BINDING_CORE.
-
-```json
-{ "include_log": true, "log_limit": 10 }
-```
-
-**Response**: `{ enforcement_core, priority, status, gates, log_entries? }`. `status` membawa `binding_active`, `anchor_hash`, `compliance_level`, `drift_detected`, `resistance_signals`, `circumvention_attempts`. `log_entries` dibaca dari tabel `enforcement_log`.
-
-#### D3. `verify`
-Gate G0 binding-integrity — verifikasi binding terhadap stored anchor hash.
-
-```json
-{ "agents_md_path": "D:/.../PRIORITY-OMEGA-ALPHA-JCF-BIND.md" }
-```
-
-**Response**: `{ gate, result, path, canonical_source, anchor_hash, hash_match, immutability_check, enforcement_state }`. `result` adalah `"COMPLIANT"` atau `"HARD_RESET_EXECUTED"`.
+**Response**: `{ status, server, version, db_path, stats, timestamp }`
 
 ---
 
-### Core Filesystem Operations (7 Tools)
+#### Filesystem Operations (6 Tools)
 
-#### 1. `read_file`
-Baca konten file dengan caching otomatis.
+**1. `read_file`**
+Read file content with automatic caching.
 ```json
-{ "path": "c:/project/src/main.ts" }
+{ "path": "c:/project/src/main.ts", "offset": 1, "limit": 200 }
 ```
 
-#### 2. `write_file`
-Tulis/buat file dengan versioning dan secrets scan.
+**2. `write_file`**
+Write/create file with versioning and secrets scan.
 ```json
 { "path": "c:/project/src/config.ts", "content": "...", "author": "system", "message": "Initial" }
 ```
 
-#### 3. `edit_file`
-Apply textual edits dengan versioning.
+**3. `edit_file`**
+Apply textual edits with versioning.
 ```json
 { "path": "c:/project/src/main.ts", "edits": [{ "oldText": "old", "newText": "new" }] }
 ```
 
-#### 4. `append_file`
-Append konten ke file, opsi createIfMissing.
+**4. `append_file`**
+Append content to file, optional createIfMissing.
 ```json
 { "path": "c:/project/log.txt", "content": "new line\n", "createIfMissing": true }
 ```
 
-#### 5. `delete_file`
-Hapus dengan preservasi versi.
+**5. `delete_file`**
+Delete with version preservation.
 ```json
 { "path": "c:/project/src/old-file.ts" }
 ```
 
-#### 6. `list_directory`
-List isi direktori.
+**6. `list_directory`**
+List directory contents.
 ```json
 { "path": "c:/project/src", "includeHidden": false }
 ```
 
-#### 7. `search_files`
-Pattern-based search dengan glob.
+---
+
+#### Search (2 Tools)
+
+**7. `search_files`**
+Pattern-based search with glob.
 ```json
 { "pattern": "**/*.ts", "baseDir": "c:/project" }
 ```
 
----
-
-### Semantic Intelligence (1 Tool)
-
-#### 8. `semantic_search`
+**8. `semantic_search`**
 Vector similarity search.
 ```json
 { "query": "authentication middleware token validation", "limit": 10, "threshold": 0.3 }
@@ -221,60 +301,60 @@ Vector similarity search.
 
 ---
 
-### Version Control (3 Tools)
+#### Versioning (3 Tools)
 
-#### 9. `get_version_history`
-Timeline versi file.
+**9. `get_version_history`**
+File version timeline.
 ```json
 { "path": "c:/project/src/main.ts", "limit": 10 }
 ```
 
-#### 10. `rollback_file`
-Restore ke versi tertentu.
+**10. `rollback_file`**
+Restore to specific version.
 ```json
 { "path": "c:/project/src/main.ts", "versionId": "abc123" }
 ```
 
-#### 11. `get_current_metadata`
-Analisis file: language, symbols, imports, complexity.
+**11. `get_current_metadata`**
+File analysis: language, symbols, imports, complexity.
 ```json
 { "path": "c:/project/src/main.ts" }
 ```
 
 ---
 
-### Dependency & Coherence (4 Tools)
+#### Dependencies (4 Tools)
 
-#### 12. `get_dependencies`
+**12. `get_dependencies`**
 Forward dependency extraction.
 ```json
 { "path": "c:/project/src/main.ts", "transitive": false }
 ```
 
-#### 13. `get_dependents`
+**13. `get_dependents`**
 Reverse dependency lookup.
 ```json
 { "path": "c:/project/src/utils.ts", "transitive": true }
 ```
 
-#### 14. `check_coherence`
+**14. `check_coherence`**
 Coupling analysis + risk assessment.
 ```json
 { "path": "c:/project/src/main.ts" }
 ```
 
-#### 15. `detect_circular_dependencies`
-Temukan circular dependency dalam project.
+**15. `detect_circular_dependencies`**
+Find circular dependencies in project.
 ```json
 {}
 ```
 
 ---
 
-### Operations & Monitoring (4 Tools)
+#### Operations (4 Tools)
 
-#### 16. `batch_operations`
-Atomic batch processing dengan rollback.
+**16. `batch_operations`**
+Atomic batch processing with rollback.
 ```json
 {
   "operations": [
@@ -285,19 +365,19 @@ Atomic batch processing dengan rollback.
 }
 ```
 
-#### 17. `health_check`
-System health + metrics + subsystem warnings (embedding unavailability, self-healing degradation, rate limiter stress).
+**17. `health_check`**
+System health + metrics + subsystem warnings.
 ```json
 {}
 ```
 
-#### 18. `get_enabled_features`
-List semua fitur yang aktif.
+**18. `get_enabled_features`**
+List all active features.
 ```json
 {}
 ```
 
-#### 19. `get_audit_log`
+**19. `get_audit_log`**
 Query audit events.
 ```json
 { "action": "write_file", "limit": 10 }
@@ -305,43 +385,43 @@ Query audit events.
 
 ---
 
-### Cognitive Intelligence (10 Tools)
+#### Cognitive Intelligence (11 Tools)
 
-#### 20. `build_cognitive_index`
-Build full cognitive index untuk project. Ini adalah langkah pertama sebelum menggunakan tool kognitif lainnya.
+**20. `build_cognitive_index`**
+Build full cognitive index for project. First step before using other cognitive tools.
 
 ```json
 { "rootPath": "c:/project" }
 ```
 
-**Proses:**
+**Process:**
 1. Layer 1: Project Skeleton — directory tree, tech stack, architecture patterns
 2. Layer 2: Module Contracts — exports, imports, defined types per file
 3. Layer 3: Unit Fingerprints — per-function/class signatures, complexity, purity, side effects
-4. Build Node-Level Knowledge Graph dari index
-5. Detect patterns dan calculate compression
-6. Analyze type flows dan data pipelines
+4. Build Node-Level Knowledge Graph from index
+5. Detect patterns and calculate compression
+6. Analyze type flows and data pipelines
 
-**Response:** Statistik lengkap — modules, units, estimated token cost
+**Response:** Full statistics — modules, units, estimated token cost
 
-#### 21. `get_project_skeleton`
-Dapatkan Layer 1 project skeleton.
+**21. `get_project_skeleton`**
+Get Layer 1 project skeleton.
 ```json
 {}
 ```
 
 **Response:** Directory tree, tech stack, architecture patterns, entry points, config files
 
-#### 22. `get_module_contracts`
-Dapatkan Layer 2 module contracts.
+**22. `get_module_contracts`**
+Get Layer 2 module contracts.
 ```json
 { "filePaths": ["c:/project/src/main.ts"] }
 ```
 
 **Response:** Per-file exports, imports, defined types, pattern classification
 
-#### 23. `get_unit_fingerprints`
-Dapatkan Layer 3 unit fingerprints dengan filter opsional.
+**23. `get_unit_fingerprints`**
+Get Layer 3 unit fingerprints with optional filters.
 ```json
 {
   "filePaths": ["c:/project/src/"],
@@ -352,8 +432,8 @@ Dapatkan Layer 3 unit fingerprints dengan filter opsional.
 
 **Response:** Per-unit signatures, complexity, purity, side effects, semantic tags, call targets, type dependencies
 
-#### 24. `query_code_intelligence`
-Unified query interface — satu tool untuk semua modul kognitif.
+**24. `query_code_intelligence`**
+Unified query interface — single tool for all cognitive modules.
 
 ```json
 {
@@ -373,31 +453,25 @@ Unified query interface — satu tool untuk semua modul kognitif.
 | `flow` | Type flow for target type |
 | `patterns` | Detected patterns + compression |
 | `subgraph` | Knowledge subgraph around target |
-| `full_context` | **Compressed full project knowledge** — optimal untuk LLM context |
+| `full_context` | **Compressed full project knowledge** — optimal for LLM context |
 
-#### 25. `get_impact_analysis`
-Impact set (direct + transitive) + subgraph untuk node.
+**25. `get_impact_analysis`**
+Impact set (direct + transitive) + subgraph for node.
 ```json
 { "nodeId": "module:c:/project/src/auth.ts", "depth": 2 }
 ```
 
-**Response:**
-- `direct`: Node yang langsung bergantung pada target
-- `transitive`: Node yang tidak langsung bergantung
-- `subgraph`: Visualisasi subgraph sekitar node
+**Response:** Direct dependents, transitive dependents, subgraph visualization
 
-#### 26. `get_type_flow`
-Type flow + consumers + producers untuk type tertentu.
+**26. `get_type_flow`**
+Type flow + consumers + producers for specific type.
 ```json
 { "typeName": "UserSession" }
 ```
 
-**Response:**
-- `typeFlow`: Definition → Production → Transformation → Validation → Consumption
-- `consumers`: Unit yang menggunakan type ini
-- `producers`: Unit yang memproduksi type ini
+**Response:** Type flow (definition → production → transformation → validation → consumption), consumers, producers
 
-#### 27. `detect_patterns`
+**27. `detect_patterns`**
 Detect code patterns + semantic compression.
 ```json
 {}
@@ -420,16 +494,16 @@ Detect code patterns + semantic compression.
 
 **Response:** Patterns detected, compression ratio, token savings
 
-#### 28. `get_knowledge_subgraph`
-Extract subgraph dari knowledge graph.
+**28. `get_knowledge_subgraph`**
+Extract subgraph from knowledge graph.
 ```json
 { "nodeId": "module:c:/project/src/auth.ts", "depth": 2 }
 ```
 
 **Response:** Nodes, edges, entry points, boundary nodes, stats
 
-#### 29. `get_intelligence_stats`
-Statistik semua modul kognitif.
+**29. `get_intelligence_stats`**
+Statistics for all cognitive modules.
 ```json
 {}
 ```
@@ -438,13 +512,284 @@ Statistik semua modul kognitif.
 
 ---
 
-## Konfigurasi
+### Healthcare Tools (28)
+
+#### FHIR R4 (8 Tools)
+
+**H1. `fhir_create`**
+Create a FHIR resource.
+```json
+{
+  "resourceType": "Patient",
+  "resource": {
+    "id": "pat1",
+    "name": [{ "family": "Smith", "given": ["John"] }],
+    "gender": "male",
+    "birthDate": "2000-01-01"
+  }
+}
+```
+
+**H2. `fhir_read`**
+Read a FHIR resource by ID.
+```json
+{ "resourceType": "Patient", "id": "pat1" }
+```
+
+**H3. `fhir_update`**
+Update a FHIR resource.
+```json
+{
+  "resourceType": "Patient",
+  "id": "pat1",
+  "resource": { "gender": "female" }
+}
+```
+
+**H4. `fhir_delete`**
+Delete a FHIR resource.
+```json
+{ "resourceType": "Patient", "id": "pat1" }
+```
+
+**H5. `fhir_search`**
+Search FHIR resources with parameters.
+```json
+{
+  "resourceType": "Patient",
+  "parameters": { "name": "Smith" }
+}
+```
+
+**H6. `fhir_batch`**
+Execute batch FHIR operations.
+```json
+{
+  "operations": [
+    { "op": "create", "resourceType": "Patient", "resource": {...} },
+    { "op": "read", "resourceType": "Patient", "id": "pat1" }
+  ]
+}
+```
+
+**H7. `fhir_validate`**
+Validate a FHIR resource.
+```json
+{
+  "resourceType": "Patient",
+  "resource": { "gender": "male" }
+}
+```
+
+**H8. `fhir_capability`**
+Check server capabilities.
+```json
+{ "resourceType": "Patient" }
+```
+
+---
+
+#### Clinical Decision Support (6 Tools)
+
+**C1. `clinical_assess`**
+Assess patient condition against rules.
+```json
+{
+  "patient": {
+    "age": 65,
+    "conditions": ["I10", "E11.9"],
+    "medications": ["warfarin", "metformin"]
+  }
+}
+```
+
+**Response:** Risk assessment with recommendations
+
+**C2. `care_plan_create`**
+Generate care plan.
+```json
+{
+  "patientId": "pat1",
+  "conditions": ["I10", "E11.9"],
+  "goals": ["blood pressure control", "glucose management"]
+}
+```
+
+**C3. `medication_check`**
+Check drug interactions.
+```json
+{
+  "medications": ["warfarin", "aspirin", "metformin"]
+}
+```
+
+**Response:** Interaction warnings with severity levels
+
+**C4. `lab_interp`**
+Interpret laboratory results.
+```json
+{
+  "test": "HbA1c",
+  "value": 7.5,
+  "unit": "%"
+}
+```
+
+**C5. `risk_calculate`**
+Calculate risk score.
+```json
+{
+  "patient": {
+    "age": 65,
+    "conditions": ["I10", "E11.9"],
+    "labs": { "HbA1c": 7.5, "creatinine": 1.2 }
+  }
+}
+```
+
+**C6. `guideline_lookup`**
+Lookup clinical guideline.
+```json
+{ "guideline": "ADA_diabetes_2023" }
+```
+
+---
+
+#### HIPAA Compliance (5 Tools)
+
+**HC1. `hipaa_audit_report`**
+Generate HIPAA audit report.
+```json
+{ "startDate": "2026-01-01", "endDate": "2026-01-31" }
+```
+
+**HC2. `consent_manage`**
+Manage patient consent.
+```json
+{
+  "patientId": "pat1",
+  "action": "grant",
+  "consentType": "research"
+}
+```
+
+**HC3. `phi_detection`**
+Detect PHI in content.
+```json
+{ "content": "Patient John Smith, SSN 123-45-6789" }
+```
+
+**Response:** Detected PHI patterns with locations
+
+**HC4. `access_log`**
+Query access logs.
+```json
+{ "patientId": "pat1", "limit": 10 }
+```
+
+**HC5. `breach_assess`**
+Assess breach severity.
+```json
+{ "affectedCount": 500, "dataTypes": ["PHI", "SSN"] }
+```
+
+**Response:** Breach severity + HIPAA notification requirement
+
+---
+
+#### Synthetic Data (4 Tools)
+
+**S1. `synthetic_patient_gen`**
+Generate synthetic patients.
+```json
+{ "count": 10, "demographics": { "ageRange": [18, 80] } }
+```
+
+**S2. `synthetic_condition_gen`**
+Generate synthetic conditions.
+```json
+{ "count": 20, "icd10Codes": ["I10", "E11.9", "J45"] }
+```
+
+**S3. `synthetic_observation_gen`**
+Generate synthetic observations.
+```json
+{ "count": 50, "patientIds": ["pat1", "pat2"] }
+```
+
+**S4. `synthetic_bundle_gen`**
+Generate synthetic FHIR bundles.
+```json
+{ "count": 5, "resourceTypes": ["Patient", "Observation", "Condition"] }
+```
+
+---
+
+#### A2A Bridge (5 Tools)
+
+**A1. `a2a_agent_card`**
+Declare agent capabilities.
+```json
+{
+  "agentId": "lab-agent",
+  "name": "Laboratory Agent",
+  "capabilities": ["lab_order", "lab_result"]
+}
+```
+
+**A2. `a2a_discover_agents`**
+Discover available agents.
+```json
+{}
+```
+
+**Response:** List of registered agents with capabilities
+
+**A3. `a2a_send_task`**
+Send task to agent.
+```json
+{
+  "agentId": "lab-agent",
+  "taskId": "task-123",
+  "task": { "type": "lab_order", "parameters": {...} },
+  "priority": "urgent"
+}
+```
+
+**A4. `a2a_get_task_status`**
+Query task status.
+```json
+{ "taskId": "task-123" }
+```
+
+**Response:** Task status (pending/running/completed/failed)
+
+**A5. `a2a_route_message`**
+Route message to agent.
+```json
+{
+  "agentId": "lab-agent",
+  "message": { "type": "inquiry", "content": "..." }
+}
+```
+
+---
+
+## Configuration
 
 ### File: `mcp-fs-config.json`
 
 ```json
 {
-  "allowedDirectories": ["c:/Users/TUF/projects"],
+  "allowedDirectories": [],
+  "forbiddenPaths": [
+    "c:/Windows",
+    "c:/Program Files",
+    "c:/Program Files (x86)",
+    "c:/System Volume Information",
+    "c:/$Recycle.Bin",
+    "c:/ProgramData/Microsoft/Windows"
+  ],
   "maxFileSize": 104857600,
   "cacheMaxSize": 1000,
   "cacheTTL": 300000,
@@ -454,152 +799,275 @@ Statistik semua modul kognitif.
   "enableSecretsScan": true,
   "enableAuditLog": true,
   "enableDependencyTracking": true,
-  "enableSelfHealing": true,
-  "enableCognitiveIndex": true,
-  "enableNodeKnowledgeGraph": true,
-  "enablePatternDetection": true,
-  "enableTypeFlowAnalysis": true,
-  "enableCodeIntelligence": true,
-  "cognitiveIndexPath": ".jcf-cognitive-index.json"
+  "enableSelfHealing": true
 }
 ```
 
-### Penjelasan Konfigurasi
+### File: `data/jcf-policies.json` (RBAC)
 
-| Parameter | Default | Deskripsi |
+```json
+[
+  {
+    "path": "/**",
+    "roles": {
+      "admin": {
+        "permissions": ["read", "write", "delete", "admin"]
+      },
+      "user": {
+        "permissions": ["read", "write"]
+      },
+      "guest": {
+        "permissions": ["read"]
+      }
+    }
+  }
+]
+```
+
+### Configuration Parameters
+
+| Parameter | Default | Description |
 |-----------|---------|-----------|
-| `allowedDirectories` | [] | Direktori yang diizinkan untuk akses |
-| `maxFileSize` | 100MB | Ukuran file maksimum |
-| `cacheMaxSize` | 1000 | Jumlah item dalam cache |
-| `cacheTTL` | 5 min | Time-to-live cache dalam ms |
-| `enableVersioning` | true | Aktifkan versioning |
-| `enableSemanticSearch` | true | Aktifkan semantic search |
-| `enableRBAC` | true | Aktifkan RBAC |
-| `enableSecretsScan` | true | Aktifkan secrets scanning |
-| `enableAuditLog` | true | Aktifkan audit logging |
-| `enableDependencyTracking` | true | Aktifkan dependency graph |
-| `enableSelfHealing` | true | Aktifkan self-healing |
-| `enableCognitiveIndex` | true | Aktifkan Cognitive Index Engine |
-| `enableNodeKnowledgeGraph` | true | Aktifkan Node-Level Knowledge Graph |
-| `enablePatternDetection` | true | Aktifkan Pattern Detector |
-| `enableTypeFlowAnalysis` | true | Aktifkan Type Flow Analyzer |
-| `enableCodeIntelligence` | true | Aktifkan Code Intelligence Engine |
-| `cognitiveIndexPath` | .jcf-cognitive-index.json | Path untuk menyimpan cognitive index |
+| `allowedDirectories` | [] | Allowed directories for access |
+| `forbiddenPaths` | System paths | Blocked paths (Windows system directories) |
+| `maxFileSize` | 100MB | Maximum file size |
+| `cacheMaxSize` | 1000 | Number of items in cache |
+| `cacheTTL` | 5 min | Cache time-to-live in ms |
+| `enableVersioning` | true | Enable versioning |
+| `enableSemanticSearch` | true | Enable semantic search |
+| `enableRBAC` | true | Enable RBAC |
+| `enableSecretsScan` | true | Enable secrets scanning |
+| `enableAuditLog` | true | Enable audit logging |
+| `enableDependencyTracking` | true | Enable dependency graph |
+| `enableSelfHealing` | true | Enable self-healing |
 
 ---
 
-## Penggunaan Lanjutan
+## Advanced Usage
 
 ### Cognitive Intelligence Workflow
 
-1. **Build Index** — Jalankan `build_cognitive_index` dengan rootPath project
-2. **Explore** — Gunakan `get_project_skeleton` untuk overview
-3. **Deep Dive** — Gunakan `get_module_contracts` dan `get_unit_fingerprints` untuk detail
-4. **Analyze** — Gunakan `get_impact_analysis` untuk memahami dampak perubahan
-5. **Trace Types** — Gunakan `get_type_flow` untuk memahami aliran data
-6. **Detect Patterns** — Gunakan `detect_patterns` untuk identifikasi arsitektur
-7. **Query All** — Gunakan `query_code_intelligence` type `full_context` untuk compressed knowledge
+1. **Build Index** — Run `build_cognitive_index` with project rootPath
+2. **Explore** — Use `get_project_skeleton` for overview
+3. **Deep Dive** — Use `get_module_contracts` and `get_unit_fingerprints` for details
+4. **Analyze** — Use `get_impact_analysis` to understand change impact
+5. **Trace Types** — Use `get_type_flow` to understand data flow
+6. **Detect Patterns** — Use `detect_patterns` for architecture identification
+7. **Query All** — Use `query_code_intelligence` type `full_context` for compressed knowledge
+
+### FHIR Resource Workflow
+
+1. **Create Patient** — Use `fhir_create` with Patient resource
+2. **Add Conditions** — Use `fhir_create` with Condition resources
+3. **Add Observations** — Use `fhir_create` with Observation resources
+4. **Validate** — Use `fhir_validate` to check compliance
+5. **Search** — Use `fhir_search` to find resources
+6. **Batch Operations** — Use `fhir_batch` for multiple operations
+7. **Check Capabilities** — Use `fhir_capability` to verify server support
+
+### Clinical Decision Support Workflow
+
+1. **Assess Patient** — Use `clinical_assess` with patient data
+2. **Check Medications** — Use `medication_check` for drug interactions
+3. **Interpret Labs** — Use `lab_interp` for lab results
+4. **Calculate Risk** — Use `risk_calculate` for risk scoring
+5. **Lookup Guidelines** — Use `guideline_lookup` for clinical guidelines
+6. **Create Care Plan** — Use `care_plan_create` for care planning
+
+### A2A Agent Workflow
+
+1. **Discover Agents** — Use `a2a_discover_agents` to find available agents
+2. **Send Task** — Use `a2a_send_task` to assign work
+3. **Check Status** — Use `a2a_get_task_status` to monitor progress
+4. **Route Messages** — Use `a2a_route_message` for agent communication
 
 ### Semantic Search Best Practices
 
-1. **Gunakan query deskriptif**: "user authentication login flow" lebih baik dari "auth"
-2. **Atur threshold sesuai kebutuhan**:
+1. **Use descriptive queries**: "user authentication login flow" better than "auth"
+2. **Set threshold appropriately**:
    - 0.8+ = exact match
    - 0.5-0.8 = related
    - 0.3-0.5 = loosely related
-3. **Gunakan limit untuk performance**: Default 10 sudah optimal
+3. **Use limit for performance**: Default 10 is optimal
 
 ### Dependency Analysis
 
-**Interpretasi Coherence Score:**
-- 0.0-0.3: Low coupling (baik)
+**Coherence Score Interpretation:**
+- 0.0-0.3: Low coupling (good)
 - 0.3-0.7: Medium coupling
-- 0.7-1.0: High coupling (perlu di-refactor)
+- 0.7-1.0: High coupling (needs refactoring)
 
 ---
 
-## Keamanan
+## Security
 
 ### Path Validation
-Semua path divalidasi dan dinormalisasi. NFC normalization + `path.relative` boundary check + `..` segment detection + NUL-byte rejection + symlink-escape resolution. Case-insensitive di Windows.
+All paths validated and normalized. NFC normalization + `path.relative` boundary check + `..` segment detection + NUL-byte rejection + symlink-escape resolution. Case-insensitive on Windows.
 
 ### SSRF Prevention (T3.1)
-`PathValidator` memblokir URL-scheme paths (`http://`, `s3://`, `ftp://`, `file://`) dan UNC paths (`\\host\share`) sebelum filesystem call. Embedding client memvalidasi terhadap host allowlist.
+`PathValidator` blocks URL-scheme paths (`http://`, `s3://`, `ftp://`, `file://`) and UNC paths (`\\host\share`) before filesystem call. Embedding client validates against host allowlist.
 
 ### Auth-Token System (T3.2)
-`AuthTokenManager` dengan SHA-256 hashed tokens, role-based access, expiry, dan `withAudit` middleware. Format: `jcf_tok_<role>_<32-byte-hex>`. Never stores raw tokens.
+`AuthTokenManager` with SHA-256 hashed tokens, role-based access, expiry, and `withAudit` middleware. Format: `jcf_tok_<role>_<32-byte-hex>`. Never stores raw tokens.
 
 ### Secrets Detection (30+ patterns)
-Sebelum write, file discan untuk 30+ pola termasuk AWS, GCP, Azure, GitHub, Slack, Stripe, npm, PyPI, Discord, Docker, private keys, JWTs, plus Shannon entropy filter.
+Before write, file scanned for 30+ patterns including AWS, GCP, Azure, GitHub, Slack, Stripe, npm, PyPI, Discord, Docker, private keys, JWTs, plus Shannon entropy filter.
 
 ### SQLCipher Encryption (T3.4)
-Optional AES-256 encrypted SQLite via `@journeyapps/sqlcipher`. Aktifkan dengan:
+Optional AES-256 encrypted SQLite via `@journeyapps/sqlcipher`. Enable with:
 ```bash
 export JCF_USE_SQLCIPHER=1
 export JCF_DB_KEY="<64-hex-char-key>"
 ```
 
 ### Audit Trail
-Semua operasi dicatat dengan timestamp, actor, action, result, path. Audit log immutable dalam tabel SQLite terindeks.
+All operations recorded with timestamp, actor, action, result, path. Audit log immutable in indexed SQLite table.
+
+### HIPAA Compliance
+- PHI detection with 10 pattern types
+- Real-time audit trail
+- Breach assessment with HIPAA notification threshold
+- Consent management
+- Access logging
 
 ---
 
 ## Troubleshooting
 
 ### Error: "Module not found"
-**Solusi**: Pastikan semua import memiliki ekstensi `.js`:
+**Solution**: Ensure all imports have `.js` extensions:
 ```typescript
-import { Server } from "./server.js";  // Benar
+import { Server } from "./server.js";  // Correct
 ```
 
 ### Error: "Permission denied"
-**Solusi**: Tambah path ke `allowedDirectories` di `mcp-fs-config.json`.
+**Solution**: Add path to `allowedDirectories` in `mcp-fs-config.json`.
 
 ### Error: "No cognitive index built yet"
-**Solusi**: Jalankan `build_cognitive_index` terlebih dahulu sebelum menggunakan tool kognitif lainnya.
+**Solution**: Run `build_cognitive_index` first before using other cognitive tools.
 
-### Server tidak start
-**Solusi**: Validasi JSON config: `node -e "JSON.parse(require('fs').readFileSync('mcp-fs-config.json'))"`
+### Server won't start
+**Solution**: Validate JSON config: `node -e "JSON.parse(require('fs').readFileSync('mcp-fs-config.json'))"`
+
+### FHIR validation error
+**Solution**: Check FHIR resource structure against FHIR R4 specification. Use `fhir_validate` before create/update.
+
+### Drug interaction check returns no results
+**Solution**: Ensure medication names match the 15 interaction pairs in the system (warfarin, digoxin, metformin, statins, etc.)
+
+### A2A agent not found
+**Solution**: Use `a2a_discover_agents` to list available agents. For hackathon demo, agents are statically registered (Lab, Pharmacy, Radiology, Referral).
 
 ---
 
 ## Best Practices
 
-1. **Build Cognitive Index dulu** sebelum menggunakan tool kognitif
-2. **Gunakan `full_context` query** untuk mendapatkan compressed project knowledge
-3. **Aktifkan Versioning** untuk production — selalu lacak perubahan
-4. **Batasi allowedDirectories** — jangan gunakan `/` atau `*`
-5. **Monitor Audit Log** secara reguler
-6. **Gunakan Batch Operations** untuk multiple file operations
-7. **Periksa Dependencies** sebelum refactor dengan `check_coherence`
-8. **Gunakan Impact Analysis** sebelum mengubah file yang banyak di-import
+1. **Build Cognitive Index first** before using cognitive tools
+2. **Use `full_context` query** to get compressed project knowledge
+3. **Enable Versioning** for production — always track changes
+4. **Limit allowedDirectories** — don't use `/` or `*`
+5. **Monitor Audit Log** regularly
+6. **Use Batch Operations** for multiple file operations
+7. **Check Dependencies** before refactor with `check_coherence`
+8. **Use Impact Analysis** before changing heavily-imported files
+9. **Validate FHIR resources** before create/update operations
+10. **Use synthetic data only** for competition/demo purposes (never real PHI)
 
 ---
 
-## Integrasi IDE
+## IDE Integration
 
-Server MCP ini mendukung klien yang mendukung protokol MCP (Model Context Protocol). Konfigurasi dasar:
+This MCP server supports clients that implement the MCP (Model Context Protocol) protocol. Basic configuration:
+
+### Windsurf / Codeium
+
+File: `~/.codeium/windsurf/mcp_config.json` (Windows: `C:\Users\<username>\.codeium\windsurf\mcp_config.json`)
 
 ```json
 {
   "mcpServers": {
     "jcf-healthcare-agent-hub": {
       "command": "node",
-      "args": ["C:/path/to/jcf-healthcare-agent-hub/dist/index.js"],
-      "env": { "MCP_SERVER_NAME": "jcf-healthcare-agent-hub" }
+      "args": ["C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/dist/index.js"],
+      "env": {
+        "JCF_HANDLING_TOOL_HOME": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub",
+        "JCF_HANDLING_TOOL_DATA_DIR": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/data"
+      }
     }
   }
 }
 ```
 
-Lokasi file konfigurasi bervariasi tergantung klien:
-- **Windsurf**: `~/.codeium/windsurf/mcp_config.json`
-- **Cursor**: `~/.cursor/mcp.json`
-- **VS Code**: `%APPDATA%/Code/User/mcp.json` (gunakan key `"servers"` dan tambahkan `"type": "stdio"`)
-- **Claude Desktop**: `%APPDATA%/Claude/claude_desktop_config.json`
+### Cursor
+
+File: `~/.cursor/mcp.json` (Windows: `C:\Users\<username>\.cursor\mcp.json`)
+
+```json
+{
+  "mcpServers": {
+    "jcf-healthcare-agent-hub": {
+      "command": "node",
+      "args": ["C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/dist/index.js"],
+      "env": {
+        "JCF_HANDLING_TOOL_HOME": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub",
+        "JCF_HANDLING_TOOL_DATA_DIR": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/data"
+      }
+    }
+  }
+}
+```
+
+### VS Code
+
+File: `%APPDATA%/Code/User/mcp.json` (Windows: `C:\Users\<username>\AppData\Roaming\Code\User\mcp.json`)
+
+```json
+{
+  "servers": {
+    "jcf-healthcare-agent-hub": {
+      "command": "node",
+      "args": ["C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/dist/index.js"],
+      "type": "stdio",
+      "env": {
+        "JCF_HANDLING_TOOL_HOME": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub",
+        "JCF_HANDLING_TOOL_DATA_DIR": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/data"
+      }
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+File: `%APPDATA%/Claude/claude_desktop_config.json` (Windows: `C:\Users\<username>\AppData\Roaming\Claude\claude_desktop_config.json`)
+
+```json
+{
+  "mcpServers": {
+    "jcf-healthcare-agent-hub": {
+      "command": "node",
+      "args": ["C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/dist/index.js"],
+      "env": {
+        "JCF_HANDLING_TOOL_HOME": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub",
+        "JCF_HANDLING_TOOL_DATA_DIR": "C:/Users/TUF/HACKATHON/jcf-healthcare-agent-hub/data"
+      }
+    }
+  }
+}
+```
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `JCF_HANDLING_TOOL_HOME` | Yes | Absolute path to project root |
+| `JCF_HANDLING_TOOL_DATA_DIR` | Yes | Absolute path to data directory |
+| `MCP_FS_USER_ID` | No | User ID for RBAC (default: "default-user") |
+| `MCP_FS_USER_ROLE` | No | User role for RBAC (default: "user") |
+| `MCP_FS_AUTH_TOKEN` | No | Auth token for token-based authentication |
 
 ---
 
 *Generated by JCF Agent v3.0 - Sovereign Engineering Intelligence*
 
-> Last updated: 2026-04-30 | v2.1.0-JCF | 1015 tests | 0 failures | 86%+ coverage
+> Last updated: 2026-05-08 | v2.1.0-healthcare | 2382 tests | 0 failures | 85%+ coverage | 59 tools

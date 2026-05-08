@@ -63,6 +63,7 @@ data/*.sqlite
 data/*.sqlite-shm
 data/*.sqlite-wal
 data/jcf-cognitive-index.json
+data/jcf-policies.json
 
 # Test output artifacts (not for deployment)
 test-final*.txt
@@ -77,3 +78,16 @@ coverage.json
 IMPLEMENTATION_ROADMAP.md
 SUBMISSION_GUIDE.md
 COMPETITION.md
+
+# Internal ADR documents (not for competition/deployment)
+docs/adr/
+
+# Internal scripts (not for competition/deployment)
+scripts/migrate-vector-db.mjs
+scripts/run-bench.mjs
+scripts/run-mutations.mjs
+scripts/smoke-qwen3.mjs
+
+# Old config files (not for competition/deployment)
+mcp-fs-config.json
+stryker.conf.json
